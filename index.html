@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading ...</title>
+    <script src='progress.js'></script>
+    <link rel='stylesheet' href='progress.css'/>
+    <style>
+        html,body {height: 100%;margin:0;overflow: hidden;cursor: wait;}
+        .main {
+            background: url("assets/stickers.jpg") center bottom no-repeat;
+            text-align: center;
+        }
+        table {
+            -webkit-box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.45);
+            -moz-box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.45);
+            box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.45);
+            margin:0;
+            width:100%;
+            height: 100%;
+        }
+        .footer {
+            background: #323940;
+            color: #ffffff;
+            padding: 0 20px;
+            font: 11px tahoma;
+            height: 50px;
+            text-align: center;
+        }
+        #version {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            font:11px tahoma;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div id="version"></div>
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="white">
+    <tr>
+        <td class="main"><img src="assets/logo.jpg" width="149" height="151"></td>
+    </tr>
+    <tr>
+        <td class="footer">© Facebook 2015. The Apple, Google Play, and Windows logos are trademarks of their respective owners.<br>
+            Desktop Messenger is developed by Netlabs (c) 2015.</td>
+    </tr>
+</table>
+<script type="text/javascript" src="assets/ga.js"></script>
+<script>
+    NProgress.start();
+
+    var gui = require('nw.gui'),new_win,win,inject_css;
+    win = gui.Window.get();
+//    win.showDevTools();
+
+    ga_storage._setAccount('UA-61843189-1');
+    ga_storage._setDomain('none');
+
+    document.getElementById("version").innerHTML = "version: "+gui.App.manifest.version + " (build: "+gui.App.manifest.build+")";
+    __curDir = process.cwd();
+    var fs = require("fs");
+    var path = require('path');
+    var nwDir = path.dirname(process.execPath);
+    new_win = gui.Window.open('https://www.messenger.com/t/', {
+        "icon": "icon.png",
+        "position": "center",
+        "min_width": 400,
+        "min_height": 200,
+        "toolbar":false,
+        "user-agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2350.0 Safari/537.36",
+        "show":false
+    });
+    NProgress.set(0.3);
+    ga_storage._trackPageview('splash.html',"Splash Screen");
+
+//    global.mainWindow = new_win;
+    new_win.on('loaded', function() {
+        NProgress.set(0.5);
+        if (!new_win.window.document.getElementById("injected_js")) {
+            var js_file, css_file;
+            fs.exists(nwDir + '/theme.js', function (exists) {
+                // check if there is js file in the current install dir or to use default;
+                NProgress.set(0.6);
+                js_file = exists ? nwDir + '/theme.js' : __curDir + '/theme.js';
+                fs.exists(nwDir + '/theme.css', function (exists) {
+                    NProgress.set(0.7);
+                    // check if there is js file in the current install dir or to use default;
+                    css_file = exists ? nwDir + '/theme.css' : __curDir + '/theme.css';
+                    fs.readFile(css_file, "utf8", function (error, data) {
+                        NProgress.set(0.8);
+                        add_file("css", data, new_win.window.document);
+                        fs.readFile(js_file, "utf8", function (error, data) {
+                            NProgress.set(1);
+                            add_file("js", data, new_win.window.document);
+                            new_win.maximize();
+                            setTimeout(function () {
+                                ga_storage._trackPageview('messenger.html',"Main Screen");
+                                new_win.show();
+                                gui.Window.get().hide();
+                            }, 300);
+                        });
+                    });
+                });
+            });
+        }
+    });
+    new_win.on('close', function() {
+        this.close(true);
+        gui.App.quit();
+    });
+
+    function add_file(type,data,doc){
+        var head = doc.getElementsByTagName('head')[0];
+        if(type=="css") {
+            var s = doc.createElement('style');
+            s.setAttribute('type', 'text/css');
+            s.setAttribute('id', 'injected_'+type);
+            s.appendChild(document.createTextNode(data));
+        }
+        if(type=="js") {
+            var s = doc.createElement('script');
+            s.setAttribute('type', 'text/javascript');
+            s.setAttribute('id', 'injected_'+type);
+            s.appendChild(document.createTextNode(data));
+        }
+        head.appendChild(s);
+    }
+
+</script>
+</body>
+</html>

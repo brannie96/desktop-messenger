@@ -1,0 +1,25 @@
+{
+  "main": "splash.html",
+  "name": "desktop-messenger",
+  "description": "Simple desktop client for Facebook Messenger",
+  "version": "0.1.1",
+  "build": "2015-04-13",
+  "single-instance":true,
+  "window": {
+    "title": "Messenger Loading",
+    "icon": "assets/icon.png",
+    "show":false,
+    "toolbar": true,
+    "frame": true,
+    "width": 960,
+    "height": 680,
+    "position": "center",
+    "always-on-top":true,
+    "show_in_taskbar":false,
+    "transparent": false
+  },
+  "webkit": {
+    "page-cache":true,
+    "plugin": true
+  }
+}

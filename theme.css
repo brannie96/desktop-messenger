@@ -1,0 +1,108 @@
+._s15 {
+    display: none;
+}
+
+._2sdm {
+    /* main chat element and active chat from the list */
+    background: #F4F4F4;
+}
+._4_j4 {
+    background: #F4F4F4;
+}
+
+._1ht1 {
+    /* not active list */
+    background: #323940;
+}
+._5iwm {
+    /* search element */
+    background: #323940;
+}
+._5iwm ._58al {
+    /* search element input */
+    background: rgba(255,255,255,0.5);
+}
+._5iwm ._58al::-webkit-input-placeholder {
+    color:white !important;
+}
+._1ht1 ._1ht6 {
+    /* not active list, first row */
+    color: #ccc;
+}
+._1ht1 ._1htf {
+    /* not active list, second row */
+    color: #999;
+}
+._1ht1 .timestamp {
+    /* not active list, timestamp */
+    color: #999;
+}
+
+._54-z {
+    color:black;
+}
+
+._1ht2 {
+    /* not active list */
+    background: #F4F4F4;
+}
+._1ht2 ._1ht6 {
+    /* not active list, first row */
+    color: #000;
+}
+._1ht2 ._1htf {
+    /* not active list, second row */
+    color: #333;
+}
+._1ht2 .timestamp {
+    /* not active list, timestamp */
+    color: #333;
+}
+._1ht3 ._1ht6 {
+    /* new messeges */
+    font-weight: bold;
+    color:white !important;
+}
+._1ht3 ._1htf {
+    /* new messeges */
+    font-weight: normal;
+    color:white !important;
+}
+
+@-webkit-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    50.01% { opacity: 0.5; }
+    100% { opacity: .3; }
+}
+
+._36ic,._5742 {
+    /* header row, left */
+    background: -webkit-linear-gradient(top, #3b5998, #2b4170);
+}
+._5743 {
+    /* active chat title */
+    color:white;
+}
+._2v6o {
+    color: rgba(255,255,255,0.4);
+}
+._4bl9 {
+    /* Messenger title */
+    color:white;
+}
+._4bl8 {
+    /* right info sidebar */
+    display: none;
+}
+._4rv3 ._4bl8 {
+    /* right buttons in the type your message field */
+    display: block;
+}
+._fl3._30yy  {
+    /* right info sidebar button */
+    display: none;
+}
+._1q5-,._5742,._36ic {
+    border:0;
+}
