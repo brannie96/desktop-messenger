@@ -2,22 +2,29 @@
   "main": "splash.html",
   "name": "desktop-messenger",
   "description": "Simple desktop client for Facebook Messenger",
-  "version": "0.1.1",
-  "build": "2015-04-13",
-  "single-instance":true,
+  "version": "0.1.3",
+  "build": "2015-04-14",
+  "single-instance": true,
   "window": {
     "title": "Messenger Loading",
     "icon": "assets/icon.png",
-    "show":false,
+    "show": false,
     "toolbar": true,
     "frame": true,
     "width": 960,
     "height": 680,
     "position": "center",
-    "always-on-top":true,
-    "show_in_taskbar":false,
+    "always-on-top": true,
+    "show_in_taskbar": false,
     "transparent": false
   },
+  "maintainers": [
+    {
+      "name": "Vladislav Stoitsov",
+      "email": "vlado@netlabs.bg",
+      "web": "http://www.netlabs.bg"
+    }
+  ],
   "repositories": [
     {
       "type": "git",
@@ -26,7 +33,7 @@
     }
   ],
   "webkit": {
-    "page-cache":true,
+    "page-cache": true,
     "plugin": true
   }
 }
