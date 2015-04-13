@@ -18,6 +18,13 @@
     "show_in_taskbar":false,
     "transparent": false
   },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/vlados/desktop-messenger.git",
+      "path": "/"
+    }
+  ],
   "webkit": {
     "page-cache":true,
     "plugin": true
