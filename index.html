@@ -11,9 +11,7 @@
             text-align: center;
         }
         table {
-            -webkit-box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.45);
-            -moz-box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.45);
-            box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.45);
+            -webkit-box-shadow: 0 0 10px 2px rgba(0,0,0,0.45);
             margin:0;
             width:100%;
             height: 100%;
@@ -52,7 +50,6 @@
 
     var gui = require('nw.gui'),new_win,win,inject_css;
     win = gui.Window.get();
-//    win.showDevTools();
 
     ga_storage._setAccount('UA-61843189-1');
     ga_storage._setDomain('none');
@@ -112,14 +109,15 @@
 
     function add_file(type,data,doc){
         var head = doc.getElementsByTagName('head')[0];
-        if(type=="css") {
-            var s = doc.createElement('style');
+        var s;
+        if (type == "css") {
+            s = doc.createElement('style');
             s.setAttribute('type', 'text/css');
-            s.setAttribute('id', 'injected_'+type);
+            s.setAttribute('id', 'injected_' + type);
             s.appendChild(document.createTextNode(data));
         }
         if(type=="js") {
-            var s = doc.createElement('script');
+            s = doc.createElement('script');
             s.setAttribute('type', 'text/javascript');
             s.setAttribute('id', 'injected_'+type);
             s.appendChild(document.createTextNode(data));
