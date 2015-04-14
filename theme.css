@@ -63,6 +63,11 @@
     font-weight: bold;
     color:white !important;
 }
+
+._1ht3 {
+    /* new messeges */
+    border-left: 7px solid gold;
+}
 ._1ht3 ._1htf {
     /* new messeges */
     font-weight: normal;
