@@ -101,7 +101,7 @@
                             NProgress.set(1);
                             add_file("js", data, new_win.window.document);
                             setTimeout(function () {
-                                win.close();
+                                win.hide();
                                 new_win.maximize();
                                 new_win.show();
                                 new_win.focus();
@@ -114,6 +114,10 @@
         }
     });
     new_win.on('close', function () {
+        this.close(true);
+        gui.App.quit();
+    });
+    win.on('close', function () {
         this.close(true);
         gui.App.quit();
     });
