@@ -5,17 +5,25 @@
     <script src='assets/progress.js'></script>
     <link rel='stylesheet' href='assets/progress.css'/>
     <style>
-        html,body {height: 100%;margin:0;overflow: hidden;cursor: wait;}
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            cursor: wait;
+        }
+
         .main {
             background: url("assets/stickers.jpg") center bottom no-repeat;
             text-align: center;
         }
+
         table {
-            -webkit-box-shadow: 0 0 10px 2px rgba(0,0,0,0.45);
-            margin:0;
-            width:100%;
+            -webkit-box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.45);
+            margin: 0;
+            width: 100%;
             height: 100%;
         }
+
         .footer {
             background: #323940;
             color: #ffffff;
@@ -24,11 +32,12 @@
             height: 50px;
             text-align: center;
         }
+
         #version {
             position: absolute;
             left: 20px;
             top: 20px;
-            font:11px tahoma;
+            font: 11px tahoma;
             color: #999;
         }
     </style>
@@ -40,21 +49,20 @@
         <td class="main"><img src="assets/logo.jpg" width="149" height="151"></td>
     </tr>
     <tr>
-        <td class="footer">© Facebook 2015. The Apple, Google Play, and Windows logos are trademarks of their respective owners.<br>
-            Desktop Messenger is developed by Netlabs (c) 2015.</td>
+        <td class="footer">© Facebook 2015. The Apple, Google Play, and Windows logos are trademarks of their respective
+            owners.<br>
+            Desktop Messenger is developed by Netlabs (c) 2015.
+        </td>
     </tr>
 </table>
-<script type="text/javascript" src="assets/ga.js"></script>
 <script>
     NProgress.start();
-
-    var gui = require('nw.gui'),new_win,win,inject_css;
+</script>
+<script type="text/javascript">
+    var gui = require('nw.gui'), new_win, win, inject_css;
     win = gui.Window.get();
 
-    ga_storage._setAccount('UA-61843189-1');
-    ga_storage._setDomain('none');
-
-    document.getElementById("version").innerHTML = "version: "+gui.App.manifest.version + " (build: "+gui.App.manifest.build+")";
+    document.getElementById("version").innerHTML = "version: " + gui.App.manifest.version + " (build: " + gui.App.manifest.build + ")";
     __curDir = process.cwd();
     var fs = require("fs");
     var path = require('path');
@@ -64,50 +72,53 @@
         "position": "center",
         "min_width": 400,
         "min_height": 200,
-        "toolbar":false,
-        "user-agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2350.0 Safari/537.36",
-        "show":false
+        "toolbar": false,
+        "show": false
     });
     NProgress.set(0.3);
-    ga_storage._trackPageview('splash.html',"Splash Screen");
+    global.screens = {};
+    global.screens["splash"] = win;
+    global.screens["main"] = new_win;
 
-//    global.mainWindow = new_win;
-    new_win.on('loaded', function() {
-        NProgress.set(0.5);
-        if (!new_win.window.document.getElementById("injected_js")) {
+    //    global.mainWindow = new_win;
+    NProgress.set(0.3);
+    new_win.on('loaded', function () {
+        if (new_win.window.document.getElementById("injected_js")) {
+            global.screens.main.window.ga('send', 'pageview', new_win.window.document.location.pathname);
+        } else {
+            NProgress.set(0.6);
             var js_file, css_file;
             fs.exists(nwDir + '/theme.js', function (exists) {
                 // check if there is js file in the current install dir or to use default;
-                NProgress.set(0.6);
                 js_file = exists ? nwDir + '/theme.js' : __curDir + '/theme.js';
                 fs.exists(nwDir + '/theme.css', function (exists) {
-                    NProgress.set(0.7);
                     // check if there is js file in the current install dir or to use default;
                     css_file = exists ? nwDir + '/theme.css' : __curDir + '/theme.css';
                     fs.readFile(css_file, "utf8", function (error, data) {
-                        NProgress.set(0.8);
                         add_file("css", data, new_win.window.document);
+                        NProgress.set(0.8);
                         fs.readFile(js_file, "utf8", function (error, data) {
                             NProgress.set(1);
                             add_file("js", data, new_win.window.document);
-                            new_win.maximize();
                             setTimeout(function () {
-                                ga_storage._trackPageview('messenger.html',"Main Screen");
+                                win.close();
+                                new_win.maximize();
                                 new_win.show();
-                                gui.Window.get().hide();
-                            }, 300);
+                                new_win.focus();
+                                global.screens.main.window.ga('send', 'pageview', new_win.window.document.location.pathname);
+                            },300);
                         });
                     });
                 });
             });
         }
     });
-    new_win.on('close', function() {
+    new_win.on('close', function () {
         this.close(true);
         gui.App.quit();
     });
 
-    function add_file(type,data,doc){
+    function add_file(type, data, doc) {
         var head = doc.getElementsByTagName('head')[0];
         var s;
         if (type == "css") {
@@ -116,10 +127,10 @@
             s.setAttribute('id', 'injected_' + type);
             s.appendChild(document.createTextNode(data));
         }
-        if(type=="js") {
+        if (type == "js") {
             s = doc.createElement('script');
             s.setAttribute('type', 'text/javascript');
-            s.setAttribute('id', 'injected_'+type);
+            s.setAttribute('id', 'injected_' + type);
             s.appendChild(document.createTextNode(data));
         }
         head.appendChild(s);
