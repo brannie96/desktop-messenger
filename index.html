@@ -83,7 +83,7 @@
     //    global.mainWindow = new_win;
     NProgress.set(0.3);
     new_win.on('loaded', function () {
-//        checkNew();
+        checkNew();
         if (new_win.window.document.getElementById("injected_js")) {
             global.screens.main.window.ga('send', 'pageview', new_win.window.document.location.pathname);
         } else {
@@ -107,7 +107,7 @@
                                 new_win.show();
                                 new_win.focus();
                                 global.screens.main.window.ga('send', 'pageview', new_win.window.document.location.pathname);
-                            },300);
+                            }, 300);
                         });
                     });
                 });
@@ -132,14 +132,19 @@
         new_win.is_focused = false;
     });
 
+    time_wait_to_check =1;
 
     function checkNew() {
-        if(new_win.is_focused) {
-            new_win.requestAttention(false);
-        } else {
-            new_win.requestAttention(new_win.window.document.getElementsByClassName("_1ht3").length?true:false);
-        }
-        setTimeout(checkNew,10*1000);// how frequent to check for new messeges
+        /* TODO: to be added in settings */
+        /*
+         if(new_win.is_focused) {
+         new_win.requestAttention(false);
+         } else {
+         new_win.requestAttention(new_win.window.document.getElementsByClassName("_1ht3").length?true:false);
+         }
+         */
+        time_wait_to_check = (time_wait_to_check==1)?1:10;
+        setTimeout(checkNew, time_wait_to_check * 1000);// how frequent to check for new messages
     }
 
     function add_file(type, data, doc) {
