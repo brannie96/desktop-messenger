@@ -2,10 +2,10 @@
 	"main": "splash.html",
 	"name": "desktop-messenger",
 	"description": "Simple desktop client for Facebook Messenger",
-	"version": "0.1.4",
-	"build": 41,
-	"build_date": "2015-04-16 00:06:39",
+	"version": "1.0.1",
+	"build_date": "2015-04-20 19:01:37",
 	"single-instance": true,
+	"chromium-args": "--disable-gpu",
 	"window": {
 		"title": "Messenger Loading",
 		"icon": "assets/icon.png",
@@ -36,5 +36,20 @@
 	"webkit": {
 		"page-cache": true,
 		"plugin": true
+	},
+	"manifestUrl": "http://messenger.dev.netlabs.bg/latest/package.json",
+	"packages": {
+		"mac": {
+			"url": "http://messenger.dev.netlabs.bg/latest/Messenger-mac32.zip"
+		},
+		"win": {
+			"url": "http://messenger.dev.netlabs.bg/latest/Messenger-win32.zip"
+		},
+		"linux32": {
+			"url": "http://messenger.dev.netlabs.bg/latest/Messenger-linux32.zip"
+		},
+		"linux64": {
+			"url": "http://messenger.dev.netlabs.bg/latest/Messenger-linux64.zip"
+		}
 	}
 }

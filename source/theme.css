@@ -4,7 +4,7 @@
 
 ._2sdm {
     /* main chat element and active chat from the list */
-    background: white;
+    background: #E9EAED;
 }
 ._4_j4 {
     background: white;
@@ -44,7 +44,7 @@
 
 ._1ht2 {
     /* not active list */
-    background: white;
+    background: white !important;
 }
 ._1ht2 ._1ht6 {
     /* not active list, first row */
@@ -83,7 +83,7 @@
 
 ._36ic,._5742 {
     /* header row, left */
-    background: -webkit-linear-gradient(top, #3b5998, #2b4170);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(77,104,161,1)), color-stop(100%,rgba(60,90,152,1))); /* Chrome,Safari4+ */
 }
 ._5743 {
     /* active chat title */

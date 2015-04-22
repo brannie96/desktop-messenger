@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="assets/popup.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/popup.min.css">
+    <style type="text/css">
+        html,body {
+            margin:0;
+            font:12px tahoma;
+            -webkit-user-select: none;;
+        }
+        #icon {
+            -webkit-border-radius: 25px; /* future proofing */
+            border: 1px solid #069;
+            position: absolute;
+            overflow: hidden;
+            width: 50px;
+            height: 50px;
+            right: 0;
+            top: 0;
+            -webkit-app-region: drag
+        }
+        #icon img {
+            -webkit-app-region: drag
+        }
+    </style>
+</head>
+<body>
+<div id="icon" data-content=""></div>
+<script>
+    var gui = require('nw.gui');
+    var win = gui.Window.get();
+    win.on("move",function(x, y) {
+        localStorage.setItem("popup_position",JSON.stringify([x,y]));
+    });
+    document.getElementById("icon").onclick = function() {
+        global.screens.main.show();
+        global.screens.main.focus();
+    };
+    var tooltip = Tipped.create("#icon", "test", { position: 'righttop' });
+//    Tipped.show("#icon")
+</script>
+</body>
+</html>

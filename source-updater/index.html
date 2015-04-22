@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src='progress.js'></script>
+    <link rel='stylesheet' href='progress.css'/>
+    <style>
+        html, body {
+            background: #202020;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            cursor: wait;
+            color: white;
+        }
+
+        #action {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 20px;
+            margin-top: -10px;
+            font: 24px Geogria, Sans-Serif, Arial;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="action">...</div>
+<script>
+    var semver = require('semver');
+    var request = require("request");
+    var file_system = require('fs');
+    var archiver = require('archiver');
+    var application_manifest = require("C:/Users/vladi/Desktop/desktop-messanger/source/package.json");
+
+    NProgress.start();
+    window.onload = function () {
+        progress(.2, "Checking for update ...");
+        request({
+            url: 'http://messenger.dev.netlabs.bg/latest/package.json',
+            json: true
+        }, function (error, response, latest_json) {
+            if (!error && response.statusCode === 200) {
+                if (semver.gt(latest_json.version, application_manifest.version)) {
+                    if (confirm("Do you want to update to version " + latest_json.version)) {
+
+                    }
+                }
+                gui.App.quit();
+            }
+        });
+    };
+    function progress(percents, text) {
+        NProgress.set(0.3);
+        document.getElementById("action").innerHTML = text;
+    }
+</script>
+</body>
+</html>

@@ -3,6 +3,7 @@
 <head>
     <title>Loading ...</title>
     <script src='assets/progress.js'></script>
+    <script src='assets/favicon.js'></script>
     <link rel='stylesheet' href='assets/progress.css'/>
     <style>
         html, body {
@@ -13,7 +14,7 @@
         }
 
         .main {
-            background: url("assets/stickers.jpg") center bottom no-repeat;
+            background: white url("assets/stickers.jpg") center bottom no-repeat;
             text-align: center;
         }
 
@@ -62,13 +63,11 @@
     var gui = require('nw.gui'), new_win, win, inject_css;
     win = gui.Window.get();
 
-    document.getElementById("version").innerHTML = "version: " + gui.App.manifest.version + " (build: " + gui.App.manifest.build + ")";
+    document.getElementById("version").innerHTML = "version: " + gui.App.manifest.version + "";
     __curDir = process.cwd();
     var fs = require("fs");
     var path = require('path');
     var nwDir = path.dirname(process.execPath);
-//    win.showDevTools();
-
     new_win = gui.Window.open('https://www.messenger.com/login/', {
         "icon": "assets/icon.png",
         "position": "center",
@@ -77,18 +76,25 @@
         "toolbar": false,
         "show": false
     });
+    new_win.is_focused = false;
+    new_win.is_loaded = false;
+
+
     NProgress.set(0.3);
     global.screens = {};
     global.screens["splash"] = win;
     global.screens["main"] = new_win;
+//    global.screens["popup"] = popup;
 
     //    global.mainWindow = new_win;
     NProgress.set(0.3);
     new_win.on('loaded', function () {
+        new_win.is_loaded = true;
         checkNew();
+//        require('nw.gui').Window.get().showDevTools();
+          win.setBadgeLabel("2");
 
         if (new_win.window.document.getElementById("injected_js")) {
-            global.screens.main.window.ga('send', 'pageview', new_win.window.document.location.pathname);
         } else {
             NProgress.set(0.6);
             var js_file, css_file;
@@ -109,7 +115,6 @@
                                 new_win.maximize();
                                 new_win.show();
                                 new_win.focus();
-                                global.screens.main.window.ga('send', 'pageview', new_win.window.document.location.pathname);
                             }, 300);
                         });
                     });
@@ -127,7 +132,6 @@
     });
 
     // check if window has a focus
-    new_win.is_focused = false;
     new_win.on('focus', function () {
         new_win.is_focused = true;
     });
@@ -135,19 +139,39 @@
         new_win.is_focused = false;
     });
 
-    time_wait_to_check =1;
-
+    time_wait_to_check = 1;
     function checkNew() {
-        /* TODO: to be added in settings */
+        new_messages = $("._1ht3",new_win.window.document);
+        if(new_messages.length) {
+            new_win.setBadgeLabel(String(new_messages.length));
+        }
+        setTimeout(checkNew, 1000);// how frequent to check for new messages
+        return;
         /*
-         if(new_win.is_focused) {
-         new_win.requestAttention(false);
-         } else {
-         new_win.requestAttention(new_win.window.document.getElementsByClassName("_1ht3").length?true:false);
-         }
-         */
-        time_wait_to_check = (time_wait_to_check==1)?1:10;
-        setTimeout(checkNew, time_wait_to_check * 1000);// how frequent to check for new messages
+        if (new_win.is_focused) {
+//            popup.hide();
+        } else {
+            if(localStorage.getItem("popup_position") === null) {
+                pos = JSON.parse(localStorage.popup_position);
+            } else {
+                pos = [100, 50];
+                localStorage.setItem("popup_position",JSON.stringify(pos));
+            }
+            popup.moveTo(pos[0],pos[1]);
+            new_messages = $("._1ht3",new_win.window.document);
+            if(new_messages.length) {
+                for(i=0;i<new_messages.length;i++) {
+                    $("#icon",popup.window.document)[0].innerHTML = $("._55lt img",new_messages[i])[0].outerHTML;
+                    var msg = $("._1ht6",new_messages[i])[0].innerHTML +": "+ $("._1htf",new_messages[i])[0].innerText;
+                    var script = 'showTip("'+msg+'")';
+                    //              popup.window.eval(script);
+                    break;
+                }
+                popup.show();
+            }
+        }
+        time_wait_to_check = 1;
+        */
     }
     function getCookie(name, object) {
         var value = "; " + object;
@@ -172,7 +196,10 @@
         }
         head.appendChild(s);
     }
-
+    function $( cssquery,target ) {
+        var t = target.querySelectorAll(cssquery);
+        return t;
+    }
 </script>
 </body>
 </html>

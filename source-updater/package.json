@@ -1,0 +1,32 @@
+{
+  "main": "index.html",
+  "name": "netlabs-updater",
+  "description": "Update program",
+  "version": "0.0.1",
+  "single-instance": true,
+  "window": {
+    "title": "Updating",
+    "icon": "updater.png",
+    "show": true,
+    "toolbar": true,
+    "frame": false,
+    "width": 500,
+    "height": 140,
+    "position": "center",
+    "always-on-top": false,
+    "show_in_taskbar": true,
+    "transparent": false
+  },
+  "repository":[],
+  "maintainers": [
+    {
+      "name": "Vladislav Stoitsov",
+      "email": "vlado@netlabs.bg",
+      "web": "http://www.netlabs.bg"
+    }
+  ],
+  "webkit": {
+    "page-cache": true,
+    "plugin": true
+  }
+}
