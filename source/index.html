@@ -90,6 +90,7 @@
     NProgress.set(0.3);
     new_win.on('loaded', function () {
         new_win.is_loaded = true;
+        new_win.window.addEventListener('click', externalLinker, false);
         checkNew();
 //        require('nw.gui').Window.get().showDevTools();
           win.setBadgeLabel("2");
@@ -144,8 +145,10 @@
         new_messages = $("._1ht3",new_win.window.document);
         if(new_messages.length) {
             new_win.setBadgeLabel(String(new_messages.length));
+        } else {
+            new_win.setBadgeLabel("");
         }
-        setTimeout(checkNew, 1000);// how frequent to check for new messages
+        setTimeout(checkNew, 500);// how frequent to check for new messages
         return;
         /*
         if (new_win.is_focused) {
@@ -158,7 +161,8 @@
                 localStorage.setItem("popup_position",JSON.stringify(pos));
             }
             popup.moveTo(pos[0],pos[1]);
-            new_messages = $("._1ht3",new_win.window.document);
+            new_messages = $("._1ht3",
+            new_win.window.document);
             if(new_messages.length) {
                 for(i=0;i<new_messages.length;i++) {
                     $("#icon",popup.window.document)[0].innerHTML = $("._55lt img",new_messages[i])[0].outerHTML;
@@ -199,6 +203,54 @@
     function $( cssquery,target ) {
         var t = target.querySelectorAll(cssquery);
         return t;
+    }
+    function externalLinker(e) {
+        var link = e.target,
+                rel, // declared now, defined later
+                target,
+                href;
+        if(link.tagName.toLowerCase()!="a") {
+            link = closest(link,"a");
+        }
+        target = link.target;
+        href = link.href;
+        // abort link hijack if crucial variables are not defined or if user sets link to target='_self'
+        if (!link || !link.getAttribute || !href || target === '_self') {
+            return;
+        }
+
+        // defined now that we know that link.getAttribute is not undefined
+        rel = link.getAttribute('rel');
+
+        // hijack the link and open in a new window under these conditions
+        if (rel === 'external' || target === '_blank' || target === '_top') {
+            if(!gui.Shell.openExternal(href)) {
+                e.preventDefault();
+            }
+        }
+    }
+    function closest(el, selector) {
+        var matchesFn;
+
+        // find vendor prefix
+        ['matches','webkitMatchesSelector','mozMatchesSelector','msMatchesSelector','oMatchesSelector'].some(function(fn) {
+            if (typeof document.body[fn] == 'function') {
+                matchesFn = fn;
+                return true;
+            }
+            return false;
+        })
+
+        // traverse parents
+        while (el!==null) {
+            parent = el.parentElement;
+            if (parent!==null && parent[matchesFn](selector)) {
+                return parent;
+            }
+            el = parent;
+        }
+
+        return null;
     }
 </script>
 </body>
